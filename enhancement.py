@@ -1,25 +1,26 @@
 import cv2
+import os
 
 def enhance_image(image_path):
-    img = cv2.imread(image_path, 0)
 
-    clahe = cv2.createCLAHE(
-        clipLimit=3.0,
-        tileGridSize=(8, 8)
-    )
+    # Read image safely
+    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
+    if img is None:
+        raise ValueError("Image could not be loaded. Check file path or upload.")
+
+    # CLAHE enhancement
+    clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(8, 8))
     enhanced = clahe.apply(img)
 
-    enhanced = cv2.fastNlMeansDenoising(
-        enhanced,
-        None,
-        10,
-        7,
-        21
-    )
+    # Denoising
+    enhanced = cv2.fastNlMeansDenoising(enhanced, None, 10, 7, 21)
 
-    output = "outputs/enhanced.jpg"
+    # Ensure output folder exists
+    os.makedirs("outputs", exist_ok=True)
 
-    cv2.imwrite(output, enhanced)
+    output_path = os.path.join("outputs", "enhanced.jpg")
 
-    return output
+    cv2.imwrite(output_path, enhanced)
+
+    return output_path
