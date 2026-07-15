@@ -1,6 +1,7 @@
 streamlit
-streamlit-autorefresh
-pandas
-numpy
-matplotlib
-plotly
+numpy==1.26.4
+opencv-python-headless
+Pillow
+ultralytics
+torch
+torchvision
